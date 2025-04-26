@@ -6,7 +6,7 @@ from collections import Counter
 from pathlib import Path
 
 
-class QuartetSorter: 
+class QuartetPolytomy: 
     def get_new_name(self):
         self._id += 1
         return f"_{self._id}"
@@ -25,15 +25,14 @@ class QuartetSorter:
     ):
         self._id = 0
         self.tree = Phylo.read(tree_file_path, format=format)
+        self.tree.root_at_midpoint
         self.assign_internal_labels()
         self.all_leaf_names = map(
             lambda x : x.name, 
             self.tree.find_elements(terminal=True)
         )
         self.polytomies = list(filter(
-            lambda x : # special case, root needs to have 4 or more children
-                len(x.clades) > 2 if x != self.tree.root
-                else len(x.clades) > 3
+            lambda x : len(x.clades) > 2 
             ,
             self.tree.find_clades(),
         ))
@@ -43,10 +42,20 @@ class QuartetSorter:
             for polytomy in self.polytomies 
         }
 
+    def run(
+        self,
+        output_path: str,
+    ):
+        self.write(output_path)
+        # run ASTRAL 
+
+        # stitch things together
+
+
     def get_parent(self, node):
-        path = [None, self.tree.root] + self.tree.get_path(node)
-        if not path:
-            raise ValueError(f"Could not find parent of {node=}")
+        path = [self.tree.root] + self.tree.get_path(node)
+        if len(path) <= 1:
+            raise ValueError(f"Could not find parent of {node=}, are you sure {node=} is a valid non-root node?")
         parent = path[-2]
         return parent
 
@@ -95,7 +104,7 @@ class QuartetSorter:
 
     def write_polytomy_quartets(
         self,
-        output_path
+        output_path: str,
     ):
         # For each polytomy with name PN, will write a list of quartets to 
         # output_path/PN/quartets.nwk
