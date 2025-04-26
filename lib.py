@@ -1,7 +1,10 @@
 from Bio import Phylo 
 from io import StringIO
 from typing import List
+import os
 from collections import Counter
+from pathlib import Path
+
 
 class QuartetSorter: 
     def get_new_name(self):
@@ -89,6 +92,31 @@ class QuartetSorter:
 
     def get_polytomy_quartets(self):
         return self.polytomy_quartets
+
+    def write_polytomy_quartets(
+        self,
+        output_path
+    ):
+        # For each polytomy with name PN, will write a list of quartets to 
+        # output_path/PN/quartets.nwk
+        FOLDER = Path(output_path)
+        for polytomy in self.polytomies:
+            polytomy_folder = FOLDER / polytomy.name
+            os.makedirs(polytomy_folder, exist_ok=True)
+            # what happens if the leafset is not fully determined? for neighbours a,b,c,d add 
+            # ab|cd, ac|bd, and ad|bc so that no bias
+            # and make sure each leaf is in at least one quartet.
+            with open(polytomy_folder / 'quartets.nwk', 'w') as qf:
+                poly_neighbours = list(set(self.poly_label_map[polytomy.name].values())) # 
+                for i in range(len(poly_neighbours) - 3):
+                    a, b, c, d = poly_neighbours[i:i+4]
+                    qf.write(f'(({a},{b}),({c},{d}));\n')
+                    qf.write(f'(({a},{c}),({b},{d}));\n')
+                    qf.write(f'(({a},{d}),({c},{d}));\n')
+
+                for (a, b, c, d), w in self.polytomy_quartets[polytomy.name].items():
+                    qf.write(f'(({a},{b}),({c},{d}));\n' * w)
+            
 
 
 
