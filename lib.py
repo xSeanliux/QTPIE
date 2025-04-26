@@ -4,7 +4,6 @@ from typing import List
 from collections import Counter
 
 class QuartetSorter: 
-
     def get_new_name(self):
         self._id += 1
         return f"_{self._id}"
@@ -18,11 +17,11 @@ class QuartetSorter:
 
     def __init__(
         self,
-        tree_nwk: str,
+        tree_file_path: str,
         format: str = "newick",
     ):
         self._id = 0
-        self.tree = Phylo.read(StringIO(tree_nwk), format=format)
+        self.tree = Phylo.read(tree_file_path, format=format)
         self.assign_internal_labels()
         self.all_leaf_names = map(
             lambda x : x.name, 
@@ -84,6 +83,9 @@ class QuartetSorter:
             if len(set(relabelled_tuple)) == 4: # four different children
                 polytomy_quartets[pn][relabelled_tuple] += w
                 return # a quartet can be in at most one polytomy
+
+    def get_polytomy_quartets(self):
+        return self.polytomy_quartets
 
 
 
