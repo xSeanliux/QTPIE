@@ -27,8 +27,11 @@ class QuartetSorter:
             lambda x : x.name, 
             self.tree.find_elements(terminal=True)
         )
-        self.polytomies: List[Phylo.BaseTree.Clade] = list(filter(
-            lambda x : len(x.clades) > 2,
+        self.polytomies = list(filter(
+            lambda x : # special case, root needs to have 4 or more children
+                len(x.clades) > 2 if x != self.tree.root
+                else len(x.clades) > 3
+            ,
             self.tree.find_clades(),
         ))
         self.precompute_label_map()
