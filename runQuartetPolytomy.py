@@ -1,0 +1,78 @@
+import argparse
+import QuartetPolytomy
+
+import re
+
+def main():
+    parser = argparse.ArgumentParser(description="Process guide tree, quartets, and ASTRAL file.")
+    
+    parser.add_argument(
+        '-g', '--guidetree', 
+        type=str, 
+        required=True, 
+        help="Path to the guide tree file."
+    )
+    
+    parser.add_argument(
+        '-f', '--format', 
+        type=str, 
+        required=False, 
+        default='newick',
+        help="Guide tree format."
+    )
+    
+    parser.add_argument(
+        '-q', '--quartets', 
+        type=str, 
+        required=True, 
+        help="Path to the quartets file."
+    )
+    
+    parser.add_argument(
+        '-A', '--astralpath', 
+        type=str, 
+        required=True, 
+        help="Path to the ASTRAL executable."
+    )
+
+    parser.add_argument(
+        '-o', '--output', 
+        type=str, 
+        required=False, 
+        default="./tmp",
+        help="Path to output folder."
+    )
+    
+    args = parser.parse_args()
+    
+    print(f"Guide Tree Path: {args.guidetree} in {args.format} format")
+    print(f"Quartets Path: {args.quartets}")
+    print(f"ASTRAL File Path: {args.astralpath}")
+
+    qp = QuartetPolytomy(
+        tree_file_path = args.guidetree,
+        format = args.format
+    )
+    print("Finished initialising QuartetPolytomy object & precomputation.")
+    # update all quartets 
+    quartet_re = re.compile(r'\(\((\w+),(\w+)\),\((\w+),(\w+)\)\)\;?')
+    with open(args.quartets, "r") as qf:
+        quartet_lines = qf.readlines()
+        for line in quartet_lines:
+            if line == "":
+                continue
+            m = quartet_re.match(line)
+            assert m is not None, f"Quartet parsing error: {line}"
+            q = m.groups()
+            qp.update_quartet(q)
+    print("Finished updating quartets.")
+    # run
+    qp.run_astral(
+        output_path = args.output,
+        astral_path = args.astralpath
+    )
+    # stitch together (TODO)
+
+
+if __name__ == "__main__":
+    main()
