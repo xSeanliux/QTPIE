@@ -1,6 +1,8 @@
 import argparse
 from Bio import Phylo
 import sys
+from io import StringIO
+import treeswift
 from __init__ import QuartetPolytomy
 
 import re
@@ -73,7 +75,19 @@ def main():
         output_path = args.output,
         astral_path = args.astralpath
     )
-    Phylo.write(qp.tree, sys.stdout, format = 'newick')
+
+    # clean up extra nodes and remove unifurcations 
+    # unfortunately I have to extract the Newick string from Bio.Phylo
+    # and use the treeswift suppress_unifurcations function
+    for clade in qp.tree.find_clades(terminal=False):
+        clade.name = None
+
+    writer = Phylo.NewickIO.Writer([qp.tree])
+    res_newick = next(iter((writer.to_strings(plain=True))))
+    ts_tree = treeswift.read_tree(res_newick, schema = "newick")
+    ts_tree.suppress_unifurcations()
+    res_newick = ts_tree.newick()
+    print(res_newick)
 
 
 if __name__ == "__main__":

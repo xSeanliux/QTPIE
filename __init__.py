@@ -21,7 +21,7 @@ def resolve_one_polytomy(
     pt_node_name, # node name of the polytomy to resolve
     resolution_tree, # the resolution tree such that the leafset of this tree is exactly the neighbours of pt_node_name in tree_pt
 ): 
-    """ArithmeticError
+    """
     Input:
     tree_pt, tree with polytomy
     pt_node_name, node name of the polytomy to resolve
