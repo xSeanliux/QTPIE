@@ -1,11 +1,11 @@
 (
+	(HI,LU,LY),
 	(LI,LT,PR,OC),
 	(AV,PE,VE),
-	AR,
 	GK,
+	AR,
 	(OE,OG,ON,GO),
 	(OS,UM,LA),
 	(OI,WE),
-	(TA,TB),
-	(HI,LU,LY)
+	(TA,TB)
 );
