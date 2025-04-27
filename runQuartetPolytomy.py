@@ -47,15 +47,15 @@ def main():
     
     args = parser.parse_args()
     
-    print(f"Guide Tree Path: {args.guidetree} in {args.format} format")
-    print(f"Quartets Path: {args.quartets}")
-    print(f"ASTRAL File Path: {args.astralpath}")
+    print(f"Guide Tree Path: {args.guidetree} in {args.format} format", file = sys.stderr)
+    print(f"Quartets Path: {args.quartets}", file = sys.stderr)
+    print(f"ASTRAL File Path: {args.astralpath}", file = sys.stderr)
 
     qp = QuartetPolytomy(
         tree_file_path = args.guidetree,
         format = args.format
     )
-    print("Finished initialising QuartetPolytomy object & precomputation.")
+    print("Finished initialising QuartetPolytomy object & precomputation.", file = sys.stderr)
     # update all quartets 
     quartet_re = re.compile(r'\(\((\w+),(\w+)\),\((\w+),(\w+)\)\)\;?')
     with open(args.quartets, "r") as qf:
@@ -67,13 +67,12 @@ def main():
             assert m is not None, f"Quartet parsing error: {line}"
             q = m.groups()
             qp.update_quartet(q)
-    print("Finished updating quartets.")
+    print("Finished updating quartets.", file = sys.stderr)
     # run ASTRAL and resolve
     qp.run_resolve(
         output_path = args.output,
         astral_path = args.astralpath
     )
-    print(f"Output is ")
     Phylo.write(qp.tree, sys.stdout, format = 'newick')
 
 

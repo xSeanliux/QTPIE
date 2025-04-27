@@ -2,6 +2,7 @@ from Bio import Phylo
 from io import StringIO
 from typing import List
 import os
+import sys
 from collections import Counter
 from pathlib import Path
 import subprocess
@@ -39,15 +40,15 @@ def resolve_one_polytomy(
     assert parent is not None, "parent of polytomy should not be none."
     assert set([parent.name] + [ clade.name for clade in pt_node.clades ]) ==\
         set([ leaf.name for leaf in resolution_tree.find_elements(terminal=True) ] ),\
-        f"Resolution leaf set is not the same as the neighbours of the polytomy:\n"
+        f"Resolution leaf set is not the same as the neighbours of the polytomy:\n{list([parent.name] + [ clade.name for clade in pt_node.clades ])}\n{list([ leaf.name for leaf in resolution_tree.find_elements(terminal=True) ] )}"
     # stitch the children the original polytomy on the resolution
     for child in pt_node.clades:
         name = child.name 
         assert len(list(resolution_tree.find_clades(target=name, terminal=True))) == 1, f"Found multiple or no nodes in the resolution with name {name}"
         resolution_child = next(iter(resolution_tree.find_clades(target=name, terminal=True)))
         resolution_child.clades = [child]
-        resolution_child.name = pt_node.name
-        print(resolution_child, resolution_child.clades)
+        resolution_child.name = pt_node_name
+        print(resolution_child, resolution_child.clades, file = sys.stderr)
 
     # replace the parent -> polytomy node with the tree in tree_pt
     resolution_tree.root_with_outgroup([parent.name])
@@ -55,6 +56,7 @@ def resolve_one_polytomy(
     for i, c in enumerate(parent.clades):
         if c.name == pt_node.name:
             parent.clades[i] = resolution_tree.root
+            resolution_tree.root.name = pt_node_name
             break
 
     resolution_tree = old_resolution_tree
@@ -80,7 +82,10 @@ class QuartetPolytomy:
     ):
         self._id = 0
         self.tree = Phylo.read(tree_file_path, format=format)
-        self.tree.root_at_midpoint
+
+        # root at arbitrary leaf 
+        leaf = next(iter(self.tree.find_clades(terminal=True)))
+        self.tree.root_with_outgroup([leaf])
         self.assign_internal_labels()
         self.all_leaf_names = map(
             lambda x : x.name, 
@@ -106,7 +111,6 @@ class QuartetPolytomy:
         FOLDER = Path(output_path)
         # run ASTRAL 
         for polytomy in self.polytomies:
-            print("Whooosh resolving polytomy at", polytomy)
             polytomy_folder = FOLDER / polytomy.name
             poly_neighbours = list(set(self.poly_label_map[polytomy.name].values()))
             arg_list = [
@@ -115,10 +119,12 @@ class QuartetPolytomy:
                 "-o", polytomy_folder / 'result.nwk', 
             ]
             if len(poly_neighbours) <= 15:
-                print(f"{polytomy=} has {len(poly_neighbours)} neighbours. Using exact mode.")
+                print(f"{polytomy=} has {len(poly_neighbours)} neighbours. Using exact mode.", file = sys.stderr)
                 arg_list.append("-x")
             subprocess.run(
                 args = arg_list,
+                stdout=sys.stderr,
+                stderr=sys.stderr,
             )
 
             resolution = Phylo.read(polytomy_folder / 'result.nwk', format = "newick")
@@ -127,7 +133,7 @@ class QuartetPolytomy:
                 pt_node_name = polytomy.name,
                 resolution_tree=resolution 
             )
-            print(f"Resolved polytomy at {polytomy=}")
+            print(f"Resolved polytomy at {polytomy=}", file = sys.stderr)
 
 
             
@@ -151,7 +157,7 @@ class QuartetPolytomy:
                 ]
                 for leaf in leaves: 
                     poly_label_map[poly.name][leaf.name] = parent.name
-            print(len(poly_label_map[poly.name]))
+            print(len(poly_label_map[poly.name]), set(poly_label_map[poly.name].values()), file = sys.stderr)
         self.poly_label_map = poly_label_map
 
     def update_quartet(
