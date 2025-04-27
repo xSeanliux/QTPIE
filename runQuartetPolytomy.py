@@ -1,5 +1,7 @@
 import argparse
-import QuartetPolytomy
+from Bio import Phylo
+import sys
+from __init__ import QuartetPolytomy
 
 import re
 
@@ -66,12 +68,13 @@ def main():
             q = m.groups()
             qp.update_quartet(q)
     print("Finished updating quartets.")
-    # run
-    qp.run_astral(
+    # run ASTRAL and resolve
+    qp.run_resolve(
         output_path = args.output,
         astral_path = args.astralpath
     )
-    # stitch together (TODO)
+    print(f"Output is ")
+    Phylo.write(qp.tree, sys.stdout, format = 'newick')
 
 
 if __name__ == "__main__":
