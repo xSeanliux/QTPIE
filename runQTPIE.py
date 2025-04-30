@@ -35,7 +35,8 @@ def main():
     parser.add_argument(
         '-A', '--astralpath', 
         type=str, 
-        required=True, 
+        default='ASTRAL/astral.5.7.8.jar',
+        required=False, 
         help="Path to the ASTRAL executable."
     )
 
