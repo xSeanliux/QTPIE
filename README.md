@@ -21,6 +21,8 @@ Verify that ASTRAL is installed with the following command:
 ```
 
 ## Usage 
+### I have a CSV file of linguistic data
+Do you have a set of data like in 
 ### I already have quartets
 **NOTE**: Unlike ASTRAL, QTPIE does *not* accept gene trees. Only quartet trees are permitted as of the moment! In addition, quartet trees have to be inputted in a specific format (as I use regular expressions instead of a full newick parser to speed up quartet ingestion).
 ```bash
