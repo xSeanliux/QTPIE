@@ -1,0 +1,15 @@
+(
+    (AlbanianArberesh,AlbanianGheg,AlbanianStandard),
+    (Hittite,Luvian),
+    (ArmenianClassical,ArmenianEastern,ArmenianWestern),
+    (Latgalian,Latvian,Lithuanian,OldPrussian),
+    (BretonGwened,BretonTreger,GaelicIrish,GaelicManx,GaelicScottish,Gaulish,LateCornish,MiddleBreton,MiddleCornish,MiddleWelsh,OldBreton,OldIrish,OldWelsh,WelshNorth),
+    (Danish,Dutch,Elfdalian,English,Faroese,Flemish,Frisian,German,GermanBernese,Gothic,Icelandic,Luxembourgish,MiddleDutch,MiddleHighGerman,NorwegianBokmal,NorwegianNynorsk,OldEnglish,OldFrisian,OldHighGerman,OldIcelandic,OldSaxon,OldSwedish,Swedish),
+    (GreekAncient,GreekCappadocian,GreekCypriot,GreekItaliot,GreekModernStd,GreekMycenaean,GreekNewTestament,GreekPontic,TsakonianPeloponnese,TsakonianPropontis),
+    (Assamese,Bengali,Bhojpuri,Gawarbati,Gawri,Hindi,Kashmiri,Khowar,Magahi,Maithili,Marathi,Nepali,Pali,Palula,PashaiNorthWest,Punjabi,Sinhalese,Urdu,VedicEarly),
+    (AvestanYounger,Bactrian,Bakhtiari,BalochiSistani,Delvari,Hawrami,Khotanese,Khwarazmian,Kumzari,KurdishCJafi,KurdishNBahdini,KurdishSElami,KurdishSQorveh,Lari,Mazanderani,MiddlePersian,OldPersian,OsseticDigor,OsseticIron,Parthian,Pashto,PersianTehran,RajiBarzoki,Sarikoli,Sogdian,Tati,Wakhi,Yaghnobi),
+    (AngloNorman,Catalan,DalmatianVegliote,FrancoProvencal,French,Friulian,Italian,Ladin,Latin,MeglenoRomanian,Milanese,Neapolitan,OldCatalan,OldOccitan,OldSpanish,Oscan,Portuguese,PortugueseBrazilian,Romanian,SardinianLogudoro,SardinianNuoro,Spanish,Umbrian,Walloon),
+    (KalasaalaNiseigram,Kamviri,KatavariEastern,KatavariKtivi,SanuviriWama,VasivariPaski),
+    (Belarusian,Bulgarian,Czech,Kashubian,Macedonian,MacedonianSuho,MacedonianVisoka,OldChurchSlavonic,OldCzech,OldNovgorod,OldPolish,Polabian,Polish,Russian,Rusyn,SerboCroat,Slovak,Slovene,SloveneEarlyModern,SloveneKostel,SorbianLower,SorbianUpper,Ukrainian),
+    (TocharianA,TocharianB)
+);
