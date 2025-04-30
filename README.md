@@ -1,6 +1,25 @@
 # Quartet Trees Polytomy InferencE (QTPIE)
 Resolving polytomies with quartets. Can be used to scale up ASTRAL (or other quartet methods) with a guide tree.
 
+## Setup 
+### Python dependencies 
+This project requires Python. It was developed on Python 3.12.7, and depends on the following packages: 
+- [treeswift](https://github.com/niemasd/TreeSwift) (v1.1.45)
+- [BioPython](https://biopython.org/) (v1.78)
+### ASTRAL 
+Getting ASTRAL is easy, as it is already a submodule within QTPIE! Simply run 
+```bash
+git submodule init; git submodule update
+```
+to download the files in the `ASTRAL/` folder, and then build it by doing 
+```bash
+cd ASTRAL/; bash ./make.sh; cd ..
+```
+Verify that ASTRAL is installed with the following command: 
+```bash
+[[ -f ASTRAL/astral.5.7.8.jar ]] && echo "ASTRAL properly installed!"
+```
+
 ## Usage 
 ```bash
 python3 runQuartetParsimony.py\
