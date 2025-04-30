@@ -114,7 +114,7 @@ class QuartetPolytomy:
             polytomy_folder = FOLDER / polytomy.name
             poly_neighbours = list(set(self.poly_label_map[polytomy.name].values()))
             arg_list = [
-                "java", "-jar", astral_path, 
+                "java", "-jar", "-Xmx512g", astral_path, 
                 "-i", polytomy_folder / 'quartets.nwk',
                 "-o", polytomy_folder / 'result.nwk', 
             ]
